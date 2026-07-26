@@ -1,0 +1,324 @@
+// Prisma Schema for Nova Tech Backend (PostgreSQL Provider)
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ----------------------------------------------------
+// ENUMS
+// ----------------------------------------------------
+enum UserRole {
+  ADMIN
+  USER
+  EDITOR
+}
+
+enum GeneralStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum BlogStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum MessageStatus {
+  UNREAD
+  READ
+  REPLIED
+  ARCHIVED
+}
+
+enum ProjectRequestStatus {
+  PENDING
+  IN_REVIEW
+  CONTACTED
+  COMPLETED
+}
+
+enum NewsletterStatus {
+  SUBSCRIBED
+  UNSUBSCRIBED
+}
+
+// ----------------------------------------------------
+// MODELS
+// ----------------------------------------------------
+
+// 1. Admin User Model
+model User {
+  id                   String    @id @default(uuid())
+  name                 String
+  email                String    @unique
+  password             String
+  avatar               String?
+  role                 UserRole  @default(ADMIN)
+  refreshToken         String?   @db.Text
+  resetPasswordToken   String?   @db.Text
+  resetPasswordExpires DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  authoredBlogs        BlogPost[]
+
+  @@index([email])
+}
+
+// 2. Services Model
+model Service {
+  id          String        @id @default(uuid())
+  title       String
+  slug        String        @unique
+  description String        @db.Text
+  icon        String?
+  image       String?
+  category    String?
+  featured    Boolean       @default(false)
+  status      GeneralStatus @default(ACTIVE) 
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([slug])
+  @@index([category])
+  @@index([status])
+}
+
+// 3. Portfolio Model
+model Portfolio {
+  id           String        @id @default(uuid())
+  title        String
+  slug         String        @unique
+  industry     String?
+  client       String?
+  description  String        @db.Text
+  challenge    String?       @db.Text
+  solution     String?       @db.Text
+  result       String?       @db.Text
+  technologies String[]      @default([])
+  gallery      String[]      @default([])
+  image        String?
+  featured     Boolean       @default(false)
+  projectUrl   String?
+  status       GeneralStatus @default(ACTIVE) 
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([slug])
+  @@index([industry])
+  @@index([status])
+}
+
+// 4. Team Model
+model TeamMember {
+  id        String        @id @default(uuid())
+  name      String
+  position  String
+  bio       String?       @db.Text
+  skills    String[]      @default([])
+  photo     String?
+  email     String?
+  linkedin  String?
+  github    String?
+  status    GeneralStatus @default(ACTIVE) 
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([status])
+}
+
+// 5. Testimonial Model
+model Testimonial {
+  id         String        @id @default(uuid())
+  clientName String
+  company    String?
+  position   String?
+  photo      String?
+  rating     Int           @default(5)
+  review     String        @db.Text
+  status     GeneralStatus @default(ACTIVE) 
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  @@index([status])
+}
+
+// 6. Blog Model
+model BlogPost {
+  id            String     @id @default(uuid())
+  title         String
+  slug          String     @unique
+  category      String?
+  featuredImage String?
+  content       String     @db.Text
+  author        String
+  authorId      String?
+  authorUser    User?      @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  tags          String[]   @default([])
+  status        BlogStatus @default(PUBLISHED)
+  publishedAt   DateTime?  @default(now())
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@index([slug])
+  @@index([category])
+  @@index([status])
+  @@index([authorId])
+}
+
+// 7. FAQ Model
+model FAQ {
+  id        String        @id @default(uuid())
+  question  String        @db.Text
+  answer    String        @db.Text
+  category  String?
+  status    GeneralStatus @default(ACTIVE) 
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([category])
+  @@index([status])
+}
+
+// 8. Contact Messages Model
+model ContactMessage {
+  id        String        @id @default(uuid())
+  name      String
+  email     String
+  phone     String?
+  company   String?
+  service   String?
+  subject   String?
+  message   String        @db.Text
+  status    MessageStatus @default(UNREAD) 
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([email])
+  @@index([status])
+}
+
+// 9. Project Request Model
+model ProjectRequest {
+  id          String               @id @default(uuid())
+  name        String
+  email       String
+  phone       String?
+  company     String?
+  projectType String?
+  budget      String?
+  timeline    String?
+  description String               @db.Text
+  status      ProjectRequestStatus @default(PENDING) 
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+
+  @@index([email])
+  @@index([status])
+}
+
+// 10. Settings Model
+model Setting {
+  id                String   @id @default(uuid())
+  companyName       String   @default("Nova Tech")
+  logo              String?
+  favicon           String?
+  email             String?
+  phone             String?
+  address           String?
+  workingHours      String?
+  facebook          String?
+  linkedin          String?
+  instagram         String?
+  github            String?
+  youtube           String?
+  footerDescription String?  @db.Text
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+// 11. Hero Section Model
+model HeroSection {
+  id              String        @id @default(uuid())
+  title           String
+  subtitle        String?
+  description     String?       @db.Text
+  buttonOneText   String?
+  buttonOneLink   String?
+  buttonTwoText   String?
+  buttonTwoLink   String?
+  backgroundImage String?
+  status          GeneralStatus @default(ACTIVE)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+// 12. About Section Model
+model AboutSection {
+  id          String   @id @default(uuid())
+  title       String
+  description String   @db.Text
+  mission     String?  @db.Text
+  vision      String?  @db.Text
+  image       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// 13. Technologies Model
+model Technology {
+  id        String        @id @default(uuid())
+  name      String
+  logo      String?
+  category  String?
+  status    GeneralStatus @default(ACTIVE) 
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([category])
+  @@index([status])
+}
+
+// 14. Partners Model
+model Partner {
+  id        String        @id @default(uuid())
+  name      String
+  logo      String?
+  website   String?
+  status    GeneralStatus @default(ACTIVE) 
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([status])
+}
+
+// 15. Gallery Model
+model GalleryItem {
+  id        String        @id @default(uuid())
+  image     String
+  title     String?
+  category  String?
+  status    GeneralStatus @default(ACTIVE) 
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([category])
+  @@index([status])
+}
+
+// 16. Newsletter Model
+model NewsletterSubscriber {
+  id        String           @id @default(uuid())
+  email     String           @unique
+  status    NewsletterStatus @default(SUBSCRIBED) 
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  @@index([email])
+  @@index([status])
+}
