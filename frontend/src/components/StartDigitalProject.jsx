@@ -84,7 +84,7 @@ export default function StartDigitalProject({ onOpenContact }) {
   ];
 
   return (
-    <section id="estimator" className="py-24 relative overflow-hidden bg-slate-950/70 border-t border-white/10">
+    <section id="estimator" className="py-24 relative overflow-hidden bg-[var(--paper)] border-t border-[var(--line)]">
       
       {/* Background Lighting */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-blue-600/10 rounded-full blur-[220px] pointer-events-none"></div>
@@ -118,7 +118,7 @@ export default function StartDigitalProject({ onOpenContact }) {
                 className={`group relative rounded-3xl glass-panel p-6 border transition-all duration-300 cursor-pointer flex flex-col justify-between ${
                   isSelected 
                     ? 'bg-blue-600/20 border-blue-500 shadow-2xl shadow-blue-500/20 scale-[1.02]' 
-                    : 'bg-[#081226]/80 border-white/10 hover:border-blue-500/40 hover:-translate-y-1.5'
+                    : 'bg-white border-[var(--line)] hover:border-blue-500/40 hover:-translate-y-1.5'
                 }`}
               >
                 <div>
@@ -141,7 +141,7 @@ export default function StartDigitalProject({ onOpenContact }) {
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs font-mono">
+                <div className="pt-3 border-t border-[var(--line)] flex items-center justify-between text-xs font-mono">
                   <span className={isSelected ? 'text-cyan-300 font-bold' : 'text-slate-400'}>
                     {isSelected ? 'Selected' : 'Select Scope'}
                   </span>

@@ -52,7 +52,7 @@ export default function TechStack() {
   ];
 
   return (
-    <section className="py-24 relative overflow-hidden bg-slate-950/40 border-t border-white/5">
+    <section className="py-24 relative overflow-hidden bg-[var(--paper)] border-t border-[var(--line)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
@@ -77,9 +77,9 @@ export default function TechStack() {
             return (
               <div 
                 key={idx}
-                className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 bg-[#081226]/80 hover:border-blue-500/30 transition-all"
+                className="glass-panel p-6 sm:p-8 rounded-3xl border border-[var(--line)] bg-white hover:border-blue-500/30 transition-all"
               >
-                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-white/10">
+                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[var(--line)]">
                   <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
                     <IconComp className="w-5 h-5" />
                   </div>
@@ -90,7 +90,7 @@ export default function TechStack() {
                   {cat.technologies.map((t, tidx) => (
                     <div 
                       key={tidx}
-                      className="group relative p-3 rounded-2xl bg-white/5 hover:bg-slate-800 border border-white/5 hover:border-blue-500/40 transition-all cursor-pointer flex items-center justify-between gap-4 w-full sm:w-[calc(50%-0.375rem)]"
+                      className="group relative p-3 rounded-2xl bg-white/5 hover:bg-slate-800 border border-[var(--line)] hover:border-blue-500/40 transition-all cursor-pointer flex items-center justify-between gap-4 w-full sm:w-[calc(50%-0.375rem)]"
                     >
                       <div>
                         <div className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors">

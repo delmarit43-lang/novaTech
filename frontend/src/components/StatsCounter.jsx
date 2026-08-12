@@ -1,71 +1,85 @@
-import React from 'react';
-import { TrendingUp, ShieldCheck, Zap, Globe2 } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import Reveal from './Reveal.jsx';
+
+const STATS = [
+  { label: 'Featured Projects', value: 6, suffix: '+' },
+  { label: 'Institutional Clients', value: 3, suffix: '+' },
+  { label: 'Core Team', value: 3, suffix: '' },
+  { label: 'Service Categories', value: 4, suffix: '' },
+  { label: 'Delivery Focus', value: 100, suffix: '%' },
+];
+
+function useCountUp(target, active, duration = 1400) {
+  const [n, setN] = useState(0);
+  useEffect(() => {
+    if (!active) return;
+    let start;
+    let frame;
+    const step = (ts) => {
+      if (!start) start = ts;
+      const p = Math.min((ts - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setN(Math.round(target * eased));
+      if (p < 1) frame = requestAnimationFrame(step);
+    };
+    frame = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(frame);
+  }, [target, active, duration]);
+  return n;
+}
+
+function StatItem({ label, value, suffix, active }) {
+  const n = useCountUp(value, active);
+  return (
+    <div className="text-center sm:text-left p-4">
+      <p className="font-[family-name:var(--font-display)] text-4xl sm:text-5xl font-bold text-white tracking-tight">
+        {n}
+        {suffix}
+      </p>
+      <p className="mt-2 text-sm text-slate-300">{label}</p>
+    </div>
+  );
+}
 
 export default function StatsCounter() {
-  const stats = [
-    {
-      value: '$450M+',
-      label: 'Enterprise Value Generated',
-      sub: 'Client ARR Growth 2024-2025',
-      icon: TrendingUp,
-      glow: 'from-blue-600/20 to-cyan-500/20'
-    },
-    {
-      value: '99.999%',
-      label: 'Enterprise SLA Uptime',
-      sub: 'Zero Unplanned Outages Logged',
-      icon: ShieldCheck,
-      glow: 'from-purple-600/20 to-indigo-500/20'
-    },
-    {
-      value: '< 15ms',
-      label: 'Global Edge Latency P99',
-      sub: 'Sub-second API Execution',
-      icon: Zap,
-      glow: 'from-cyan-600/20 to-emerald-500/20'
-    },
-    {
-      value: '120+',
-      label: 'Production Systems Shipped',
-      sub: 'Across North America, EU & Asia',
-      icon: Globe2,
-      glow: 'from-blue-600/20 to-indigo-600/20'
-    }
-  ];
+  const ref = useRef(null);
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setActive(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   return (
-    <section className="py-20 relative overflow-hidden bg-slate-950/80 border-y border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map((st, idx) => {
-            const IconComp = st.icon;
-            return (
-              <div 
-                key={idx}
-                className="group relative p-8 rounded-3xl glass-panel border border-white/10 hover:border-blue-500/40 transition-all duration-500 hover:-translate-y-1 bg-[#081226]/90 overflow-hidden"
-              >
-                <div className={`absolute inset-0 bg-gradient-to-br ${st.glow} opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`}></div>
-
-                <div className="relative z-10 flex items-center justify-between mb-4">
-                  <div className="p-3 rounded-2xl bg-blue-500/10 text-blue-400 border border-blue-500/20 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                    <IconComp className="w-5 h-5" />
-                  </div>
-                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                </div>
-
-                <div className="relative z-10 space-y-1">
-                  <div className="text-3xl sm:text-4xl font-extrabold font-mono text-white tracking-tight group-hover:text-cyan-300 transition-colors">
-                    {st.value}
-                  </div>
-                  <h4 className="text-sm font-bold text-slate-200">{st.label}</h4>
-                  <p className="text-[11px] font-mono text-slate-400">{st.sub}</p>
-                </div>
-              </div>
-            );
-          })}
+    <section className="relative overflow-hidden bg-[#081226] py-16 sm:py-20" ref={ref}>
+      <div className="absolute inset-0 nt-grid-bg opacity-40" aria-hidden />
+      <div className="nt-glow w-80 h-80 bg-[#2563EB]/30 top-0 left-1/3" aria-hidden />
+      <div className="nt-container relative z-10">
+        <Reveal>
+          <p className="nt-eyebrow text-[#93c5fd]">Impact</p>
+          <h2 className="font-[family-name:var(--font-display)] font-bold tracking-tight text-white text-3xl sm:text-4xl mt-3">
+            What we’ve shipped so far
+          </h2>
+          <p className="mt-3 text-sm text-slate-400 max-w-xl">
+            Real delivery numbers based on our portfolio, partners, and team—not inflated marketing stats.
+          </p>
+        </Reveal>
+        <div className="mt-10 grid grid-cols-2 lg:grid-cols-5 gap-2 sm:gap-4">
+          {STATS.map((s) => (
+            <StatItem key={s.label} {...s} active={active} />
+          ))}
         </div>
-
       </div>
     </section>
   );

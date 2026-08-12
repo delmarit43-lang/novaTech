@@ -87,7 +87,7 @@ export default function PricingSection({ onOpenQuote, onOpenContact }) {
   ];
 
   return (
-    <section id="pricing" className="py-24 relative overflow-hidden bg-slate-950/60 border-t border-white/10">
+    <section id="pricing" className="py-24 relative overflow-hidden bg-[var(--paper-deep)] border-t border-[var(--line)]">
       
       {/* Ambient Glow Lighting */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-blue-600/10 rounded-full blur-[220px] pointer-events-none"></div>
@@ -122,7 +122,7 @@ export default function PricingSection({ onOpenQuote, onOpenContact }) {
               return (
                 <div
                   key={item.id}
-                  className={`group relative rounded-3xl glass-panel p-7 border border-white/10 hover:border-blue-500/40 transition-all duration-500 bg-[#081226]/90 shadow-xl overflow-hidden hover:-translate-y-2 flex flex-col justify-between ${
+                  className={`group relative rounded-3xl glass-panel p-7 border border-[var(--line)] hover:border-blue-500/40 transition-all duration-500 bg-white shadow-xl overflow-hidden hover:-translate-y-2 flex flex-col justify-between ${
                     idx === 6 ? 'md:col-span-2 lg:col-span-1' : ''
                   }`}
                 >
@@ -146,7 +146,7 @@ export default function PricingSection({ onOpenQuote, onOpenContact }) {
                     </p>
                   </div>
 
-                  <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs font-mono text-slate-400 group-hover:text-cyan-300 transition-colors relative z-10">
+                  <div className="mt-6 pt-4 border-t border-[var(--line)] flex items-center justify-between text-xs font-mono text-slate-400 group-hover:text-cyan-300 transition-colors relative z-10">
                     <span className="flex items-center gap-1.5">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Custom Tailored
                     </span>
@@ -190,13 +190,13 @@ export default function PricingSection({ onOpenQuote, onOpenContact }) {
           </div>
 
           {/* Trust Indicators Badges */}
-          <div className="pt-8 border-t border-white/10 flex flex-wrap items-center justify-center gap-4 sm:gap-6 relative z-10">
+          <div className="pt-8 border-t border-[var(--line)] flex flex-wrap items-center justify-center gap-4 sm:gap-6 relative z-10">
             {trustBadges.map((badge, bidx) => {
               const IconB = badge.icon;
               return (
                 <div 
                   key={bidx}
-                  className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-slate-300"
+                  className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-[var(--line)] text-xs font-mono text-slate-300"
                 >
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                   <span>{badge.text}</span>

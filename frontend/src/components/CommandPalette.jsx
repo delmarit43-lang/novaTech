@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, X, Sparkles, Layers, Cpu, Code2, ShieldCheck, Mail, ArrowRight } from 'lucide-react';
+import { Search, X, Layers, Cpu, Code2, ShieldCheck, Mail, ArrowRight, Users, HelpCircle } from 'lucide-react';
 
 export default function CommandPalette({ isOpen, onClose, onNavigate, onOpenContact, onOpenQuote }) {
   const [query, setQuery] = useState('');
@@ -10,9 +10,7 @@ export default function CommandPalette({ isOpen, onClose, onNavigate, onOpenCont
         e.preventDefault();
         if (isOpen) onClose();
       }
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
-      }
+      if (e.key === 'Escape' && isOpen) onClose();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -21,88 +19,58 @@ export default function CommandPalette({ isOpen, onClose, onNavigate, onOpenCont
   if (!isOpen) return null;
 
   const actions = [
-    { label: 'Explore AI Autonomous Platform', category: 'Services', sectionId: 'services', icon: Cpu },
-    { label: 'View Enterprise Case Studies', category: 'Portfolio', sectionId: 'projects', icon: Layers },
-    { label: 'Check Partnership Investment Plans', category: 'Pricing', sectionId: 'pricing', icon: Sparkles },
-    { label: 'Read Technical Whitepapers', category: 'Blog', sectionId: 'insights', icon: Code2 },
-    { label: 'Review Development Methodology', category: 'Process', sectionId: 'process', icon: ShieldCheck },
-    { label: 'Request Architectural Proposal', category: 'Contact', action: onOpenContact, icon: Mail },
-    { label: 'Calculate Project Investment Quote', category: 'Quote', action: onOpenQuote, icon: Sparkles }
+    { label: 'Services', sectionId: 'services', icon: Cpu },
+    { label: 'Portfolio', sectionId: 'projects', icon: Layers },
+    { label: 'Process', sectionId: 'process', icon: ShieldCheck },
+    { label: 'Team', sectionId: 'team', icon: Users },
+    { label: 'FAQ', sectionId: 'faq', icon: HelpCircle },
+    { label: 'Start Building', action: onOpenContact, icon: Mail },
+    { label: 'Request Proposal', action: onOpenQuote, icon: Code2 },
   ];
 
-  const filteredActions = actions.filter(a => 
-    a.label.toLowerCase().includes(query.toLowerCase()) || 
-    a.category.toLowerCase().includes(query.toLowerCase())
-  );
+  const filtered = actions.filter((a) => a.label.toLowerCase().includes(query.toLowerCase()));
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-xl glass-panel rounded-3xl border border-white/20 bg-[#081226]/95 overflow-hidden shadow-2xl">
-        
-        {/* Search Header */}
-        <div className="p-4 border-b border-white/10 flex items-center gap-3">
-          <Search className="w-5 h-5 text-blue-400" />
-          <input 
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4 bg-[#081226]/55 backdrop-blur-sm">
+      <div className="w-full max-w-xl rounded-2xl border border-[#E5E7EB] bg-white overflow-hidden shadow-2xl">
+        <div className="p-4 border-b border-[#E5E7EB] flex items-center gap-3">
+          <Search className="w-5 h-5 text-[#2563EB]" />
+          <input
             type="text"
             autoFocus
-            placeholder="Type a command or jump to section..."
+            placeholder="Jump to a section..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full bg-transparent text-white placeholder:text-slate-500 font-mono text-sm focus:outline-none"
+            className="flex-1 bg-transparent outline-none text-sm text-[#081226] placeholder:text-slate-400"
           />
-          <button 
-            onClick={onClose}
-            className="p-1 rounded-lg bg-white/5 text-slate-400 hover:text-white"
-          >
+          <button type="button" onClick={onClose} className="p-1.5 rounded-lg hover:bg-[#F8FAFC] text-slate-400" aria-label="Close">
             <X className="w-4 h-4" />
           </button>
         </div>
-
-        {/* Action List */}
-        <div className="p-3 max-h-80 overflow-y-auto space-y-1">
-          {filteredActions.length === 0 ? (
-            <div className="p-6 text-center text-slate-500 text-xs font-mono">
-              No matching commands found.
-            </div>
-          ) : (
-            filteredActions.map((act, idx) => {
-              const IconComp = act.icon;
-              return (
-                <div
-                  key={idx}
-                  onClick={() => {
-                    onClose();
-                    if (act.action) act.action();
-                    else if (act.sectionId) onNavigate(act.sectionId);
-                  }}
-                  className="p-3 rounded-xl hover:bg-blue-600/20 hover:border-blue-500/30 border border-transparent flex items-center justify-between cursor-pointer group transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-white/5 text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                      <IconComp className="w-4 h-4" />
-                    </div>
-                    <span className="text-xs font-semibold text-white group-hover:text-blue-300">
-                      {act.label}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-mono text-slate-400 bg-white/5 px-2 py-0.5 rounded">
-                      {act.category}
-                    </span>
-                    <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-1 transition-transform" />
-                  </div>
+        <div className="max-h-80 overflow-y-auto p-2">
+          {filtered.map((action, i) => {
+            const Icon = action.icon;
+            return (
+              <button
+                key={i}
+                type="button"
+                onClick={() => {
+                  onClose();
+                  if (action.action) action.action();
+                  else if (action.sectionId) onNavigate(action.sectionId);
+                }}
+                className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left hover:bg-[#F8FAFC] transition-colors"
+              >
+                <div className="p-2 rounded-lg bg-[#EFF6FF] text-[#2563EB]">
+                  <Icon className="w-4 h-4" />
                 </div>
-              );
-            })
-          )}
+                <span className="flex-1 text-sm font-semibold text-[#081226]">{action.label}</span>
+                <ArrowRight className="w-4 h-4 text-slate-300" />
+              </button>
+            );
+          })}
+          {filtered.length === 0 && <p className="text-center text-sm text-slate-400 py-8">No matches</p>}
         </div>
-
-        {/* Footer Hint */}
-        <div className="px-4 py-2.5 bg-slate-950 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-slate-500">
-          <span>Navigate with arrows or click</span>
-          <span>Press ESC to exit</span>
-        </div>
-
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Check, ArrowRight, ShieldCheck, Cpu, Code2, Sparkles, Send } from 'lucide-react';
+import { X, Check, ArrowRight, ShieldCheck, Cpu, Sparkles, Send } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { apiService } from '../services/api.js';
 
@@ -8,51 +8,45 @@ export function ServiceModal({ service, onClose, onOpenContact }) {
   const IconComp = service.icon || Cpu;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-2xl glass-panel rounded-3xl border border-white/20 bg-[#081226]/95 p-6 sm:p-8 space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-        <button 
-          onClick={onClose}
-          className="absolute top-6 right-6 p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white"
-        >
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#081226]/65 backdrop-blur-sm" onClick={onClose}>
+      <div
+        className="w-full max-w-2xl bg-white rounded-3xl border border-[#E5E7EB] p-6 sm:p-8 space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button type="button" onClick={onClose} className="absolute top-5 right-5 p-2 rounded-xl hover:bg-[#F8FAFC] text-slate-400" aria-label="Close">
           <X className="w-5 h-5" />
         </button>
-
         <div className="flex items-center gap-4">
-          <div className="p-3.5 rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/30">
+          <div className="p-3.5 rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#3B82F6] text-white shadow-lg shadow-blue-500/30">
             <IconComp className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs font-mono text-cyan-400 bg-cyan-500/10 px-2.5 py-0.5 rounded border border-cyan-500/20">
-              {service.category}
-            </span>
-            <h3 className="text-2xl font-bold text-white mt-1">{service.title}</h3>
+            <span className="text-xs font-semibold text-[#2563EB]">{service.category}</span>
+            <h3 className="text-2xl font-bold text-[#081226] mt-0.5">{service.title}</h3>
           </div>
         </div>
-
-        <p className="text-slate-300 text-sm leading-relaxed">{service.desc}</p>
-
-        <div className="space-y-3 pt-4 border-t border-white/10">
-          <h4 className="text-xs font-mono text-slate-400 uppercase">CORE TECHNICAL DELIVERABLES</h4>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            {service.highlights.map((h, i) => (
-              <div key={i} className="flex items-center gap-2 text-xs text-slate-200 bg-white/5 p-2.5 rounded-xl border border-white/5">
-                <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+        <p className="text-slate-600 text-sm leading-relaxed">{service.desc}</p>
+        <div className="space-y-3 pt-2 border-t border-[#E5E7EB]">
+          <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400">Included</h4>
+          <div className="grid sm:grid-cols-2 gap-2">
+            {(service.highlights || []).map((h, i) => (
+              <div key={i} className="flex items-center gap-2 text-xs text-[#081226] bg-[#F8FAFC] p-2.5 rounded-xl border border-[#E5E7EB]">
+                <Check className="w-4 h-4 text-[#2563EB] shrink-0" />
                 <span>{h}</span>
               </div>
             ))}
           </div>
         </div>
-
-        <div className="pt-6 border-t border-white/10 flex items-center justify-between">
-          <span className="text-xs font-mono text-cyan-400 font-bold">Guaranteed Performance: {service.metrics}</span>
-          <button 
+        <div className="pt-4 flex justify-end">
+          <button
+            type="button"
             onClick={() => {
               onClose();
-              onOpenContact();
+              onOpenContact?.();
             }}
-            className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-lg shadow-blue-600/30 flex items-center gap-2"
+            className="nt-btn nt-btn-primary"
           >
-            Consult Architect <ArrowRight className="w-3.5 h-3.5" />
+            Start a project <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       </div>
@@ -64,55 +58,49 @@ export function ProjectModal({ project, onClose, onOpenContact }) {
   if (!project) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-3xl glass-panel rounded-3xl border border-white/20 bg-[#081226]/95 p-6 sm:p-8 space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-        <button 
-          onClick={onClose}
-          className="absolute top-6 right-6 p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white"
-        >
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#081226]/65 backdrop-blur-sm" onClick={onClose}>
+      <div
+        className="w-full max-w-2xl bg-white rounded-3xl border border-[#E5E7EB] p-6 sm:p-8 space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button type="button" onClick={onClose} className="absolute top-5 right-5 p-2 rounded-xl hover:bg-[#F8FAFC] text-slate-400" aria-label="Close">
           <X className="w-5 h-5" />
         </button>
-
         <div>
-          <span className="text-xs font-mono text-blue-400 bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20">
-            {project.category} — {project.year}
-          </span>
-          <h3 className="text-3xl font-extrabold text-white mt-2">{project.title}</h3>
-          <p className="text-sm text-slate-400 font-mono mt-1">Client: {project.client}</p>
+          <span className="text-xs font-semibold text-[#2563EB]">{project.industry || project.category}</span>
+          <h3 className="text-2xl font-bold text-[#081226] mt-1">{project.title}</h3>
         </div>
-
-        <p className="text-slate-300 text-sm leading-relaxed">{project.description}</p>
-
-        <div className="grid grid-cols-3 gap-4 p-4 rounded-2xl bg-slate-950 border border-white/10">
-          {project.metrics.map((m, i) => (
-            <div key={i} className="text-center">
-              <div className="text-xl font-bold font-mono text-cyan-400">{m.value}</div>
-              <div className="text-[10px] font-mono text-slate-400 uppercase mt-0.5">{m.label}</div>
-            </div>
-          ))}
-        </div>
-
-        <div className="space-y-2">
-          <h4 className="text-xs font-mono text-slate-400 uppercase">TECHNOLOGY STACK USED</h4>
-          <div className="flex flex-wrap gap-2">
-            {project.tags.map((t, i) => (
-              <span key={i} className="text-xs font-mono text-slate-200 bg-white/5 px-3 py-1 rounded-lg border border-white/5">
-                {t}
-              </span>
-            ))}
+        <div className="grid sm:grid-cols-3 gap-3 text-sm">
+          <div className="rounded-2xl bg-[#F8FAFC] border border-[#E5E7EB] p-3">
+            <p className="text-[11px] uppercase text-slate-400 font-semibold">Challenge</p>
+            <p className="mt-1 text-slate-600">{project.challenge}</p>
+          </div>
+          <div className="rounded-2xl bg-[#F8FAFC] border border-[#E5E7EB] p-3">
+            <p className="text-[11px] uppercase text-slate-400 font-semibold">Solution</p>
+            <p className="mt-1 text-slate-600">{project.solution || project.description}</p>
+          </div>
+          <div className="rounded-2xl bg-[#F8FAFC] border border-[#E5E7EB] p-3">
+            <p className="text-[11px] uppercase text-slate-400 font-semibold">Results</p>
+            <p className="mt-1 text-slate-600">{project.result}</p>
           </div>
         </div>
-
-        <div className="pt-6 border-t border-white/10 flex items-center justify-between">
-          <span className="text-xs text-slate-400">Want similar results for your product?</span>
-          <button 
+        {project.tech && (
+          <div className="flex flex-wrap gap-2">
+            {project.tech.map((t) => (
+              <span key={t} className="text-xs px-2.5 py-1 rounded-lg bg-[#EFF6FF] text-[#1d4ed8] font-medium">{t}</span>
+            ))}
+          </div>
+        )}
+        <div className="pt-2 flex justify-end">
+          <button
+            type="button"
             onClick={() => {
               onClose();
-              onOpenContact();
+              onOpenContact?.();
             }}
-            className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-lg shadow-blue-600/30 flex items-center gap-2"
+            className="nt-btn nt-btn-dark"
           >
-            Request Case Study Blueprint <ArrowRight className="w-3.5 h-3.5" />
+            Build something similar
           </button>
         </div>
       </div>
@@ -122,189 +110,89 @@ export function ProjectModal({ project, onClose, onOpenContact }) {
 
 export function ArticleModal({ article, onClose }) {
   if (!article) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-3xl glass-panel rounded-3xl border border-white/20 bg-[#081226]/95 p-6 sm:p-10 space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-        <button 
-          onClick={onClose}
-          className="absolute top-6 right-6 p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
-        <div className="space-y-2">
-          <span className="text-xs font-mono text-blue-400 bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20">
-            {article.category} — {article.readTime}
-          </span>
-          <h3 className="text-2xl sm:text-4xl font-extrabold text-white leading-tight">{article.title}</h3>
-          <p className="text-xs font-mono text-slate-400">Published on {article.date} by {article.author} ({article.authorRole})</p>
-        </div>
-
-        <div className="prose prose-invert max-w-none text-slate-300 text-sm leading-relaxed space-y-4 pt-4 border-t border-white/10 font-sans">
-          {article.content.split('\n\n').map((paragraph, i) => (
-            <p key={i}>{paragraph}</p>
-          ))}
-        </div>
-
-        <div className="pt-6 border-t border-white/10 flex justify-end">
-          <button 
-            onClick={onClose}
-            className="px-6 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white font-mono text-xs"
-          >
-            Close Article Reader
-          </button>
-        </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#081226]/65 backdrop-blur-sm" onClick={onClose}>
+      <div className="w-full max-w-xl bg-white rounded-3xl p-6 border border-[#E5E7EB]" onClick={(e) => e.stopPropagation()}>
+        <button type="button" onClick={onClose} className="float-right p-2 text-slate-400"><X className="w-5 h-5" /></button>
+        <h3 className="text-xl font-bold text-[#081226]">{article.title}</h3>
+        <p className="mt-3 text-sm text-slate-600">{article.excerpt || article.content}</p>
       </div>
     </div>
   );
 }
 
 export function QuoteModal({ isOpen, onClose, showToast }) {
-  const [goal, setGoal] = useState('Business & Corporate Website');
-  const [timeline, setTimeline] = useState('Rapid Sprint (2 - 4 Weeks)');
+  const [goal, setGoal] = useState('Business Website');
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   if (!isOpen) return null;
 
-  const handleCalculate = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) {
-      showToast('Please enter your work email.', 'error');
+      showToast?.('Please enter your email.', 'error');
       return;
     }
-
-    setIsSubmitting(true);
-
+    setLoading(true);
     try {
       const res = await apiService.submitProjectRequest({
         name: email.split('@')[0],
         email,
         projectType: goal,
-        timeline,
-        description: `Project Goal: ${goal}, Timeline: ${timeline}. Generated via Enterprise Investment Estimator.`
+        timeline: 'To be discussed',
+        description: `Proposal request for: ${goal}`,
       });
-
-      setIsSubmitting(false);
-
-      if (res && res.success) {
+      if (res?.success) {
         setSubmitted(true);
-        confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 }, colors: ['#3B82F6', '#38BDF8', '#8B5CF6', '#10B981'] });
-        showToast(res.message || `Custom Proposal generated! Scoping proposal sent to ${email}`, 'success');
+        confetti({ particleCount: 80, spread: 70, origin: { y: 0.65 }, colors: ['#2563EB', '#3B82F6'] });
+        showToast?.(res.message || 'Proposal request sent.', 'success');
       } else {
-        showToast(res?.message || 'Failed to process project request.', 'error');
+        showToast?.(res?.message || 'Request failed.', 'error');
       }
     } catch (err) {
-      setIsSubmitting(false);
-      showToast(err.message || 'Error generating proposal request.', 'error');
+      showToast?.(err.message || 'Request failed.', 'error');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleReset = () => {
-    setSubmitted(false);
-    setEmail('');
-    onClose();
-  };
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-xl glass-panel rounded-3xl border border-white/20 bg-[#081226]/95 p-6 sm:p-8 space-y-6 shadow-2xl relative">
-        <button 
-          onClick={handleReset}
-          className="absolute top-6 right-6 p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
-        <div className="space-y-1">
-          <span className="text-xs font-mono text-cyan-400 flex items-center gap-1">
-            <Sparkles className="w-3.5 h-3.5" /> NOVA TECH PROJECT ESTIMATOR
-          </span>
-          <h3 className="text-2xl font-bold text-white">Calculate Enterprise Investment</h3>
-          <p className="text-xs text-slate-300 font-sans">
-            Select your digital scope and receive a customized technical specification and timeline proposal.
-          </p>
-        </div>
-
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#081226]/65 backdrop-blur-sm" onClick={onClose}>
+      <div className="w-full max-w-md bg-white rounded-3xl border border-[#E5E7EB] p-6 shadow-2xl relative" onClick={(e) => e.stopPropagation()}>
+        <button type="button" onClick={onClose} className="absolute top-4 right-4 p-2 text-slate-400" aria-label="Close"><X className="w-5 h-5" /></button>
         {submitted ? (
-          <div className="py-8 text-center space-y-4 animate-in zoom-in-95 duration-300">
-            <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 mx-auto flex items-center justify-center border border-emerald-500/30">
-              <ShieldCheck className="w-8 h-8" />
-            </div>
-            <h4 className="text-xl font-bold text-white">Proposal PDF Transmitted!</h4>
-            <p className="text-xs text-slate-300 max-w-md mx-auto leading-relaxed">
-              We have generated a tailored PDF project blueprint for <span className="text-cyan-400 font-bold">{goal}</span> ({timeline}) and dispatched it to <span className="text-blue-400 font-bold">{email}</span>.
-            </p>
-            <button
-              onClick={handleReset}
-              className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-lg shadow-blue-600/30 transition-all"
-            >
-              Done
-            </button>
+          <div className="py-6 text-center space-y-3">
+            <ShieldCheck className="w-12 h-12 text-emerald-500 mx-auto" />
+            <h3 className="text-xl font-bold">Request received</h3>
+            <p className="text-sm text-slate-500">We’ll follow up at {email}.</p>
+            <button type="button" className="nt-btn nt-btn-dark" onClick={() => { setSubmitted(false); setEmail(''); onClose(); }}>Done</button>
           </div>
         ) : (
-          <form onSubmit={handleCalculate} className="space-y-4 text-xs font-mono">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="flex items-center gap-2 text-[#2563EB] text-xs font-semibold uppercase tracking-wider">
+              <Sparkles className="w-4 h-4" /> Get a proposal
+            </div>
+            <h3 className="text-2xl font-bold text-[#081226]">Tell us what you’re building</h3>
             <div>
-              <label className="text-slate-300 block mb-1.5 uppercase font-bold">PRIMARY PROJECT GOAL *</label>
-              <select 
-                value={goal}
-                onChange={(e) => setGoal(e.target.value)}
-                className="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-blue-500 transition-all font-mono"
-              >
-                <option>Business & Corporate Website</option>
-                <option>Custom Web Application</option>
-                <option>Enterprise Software (ERP, CRM, HRM, POS)</option>
-                <option>Education Solution (School/University Management, LMS)</option>
-                <option>Healthcare Solution (Hospital Management, Clinic, EMR)</option>
-                <option>Government Digital Solution (Ministry Portal, E-Gov)</option>
-                <option>Business Management System (Car Rental, Hotel, Real Estate)</option>
-                <option>Cloud Infrastructure & Database Engineering</option>
+              <label className="text-xs font-semibold text-slate-500">Project focus</label>
+              <select value={goal} onChange={(e) => setGoal(e.target.value)} className="mt-1.5 w-full px-4 py-3 rounded-xl border border-[#E5E7EB] text-sm">
+                <option>Business Website</option>
+                <option>Web Application</option>
+                <option>School Management System</option>
+                <option>Hospital Management System</option>
+                <option>E-Commerce</option>
+                <option>UI/UX & Branding</option>
               </select>
             </div>
-
             <div>
-              <label className="text-slate-300 block mb-1.5 uppercase font-bold">DESIRED TIMELINE *</label>
-              <select 
-                value={timeline}
-                onChange={(e) => setTimeline(e.target.value)}
-                className="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-blue-500 transition-all font-mono"
-              >
-                <option>Rapid Sprint (2 - 4 Weeks)</option>
-                <option>Standard Release (4 - 8 Weeks)</option>
-                <option>Enterprise Digital Transformation (8+ Weeks)</option>
-              </select>
+              <label className="text-xs font-semibold text-slate-500">Work email</label>
+              <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1.5 w-full px-4 py-3 rounded-xl border border-[#E5E7EB] text-sm" placeholder="you@company.com" />
             </div>
-
-            <div>
-              <label className="text-slate-300 block mb-1.5 uppercase font-bold">WORK EMAIL FOR DETAILED PDF BREAKDOWN *</label>
-              <input 
-                type="email"
-                required
-                placeholder="alexander@company.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-blue-500 transition-all font-mono"
-              />
-            </div>
-
-            <button 
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 transition-all mt-2"
-            >
-              {isSubmitting ? (
-                <span className="flex items-center gap-2">
-                  <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                  Generating Scoping PDF...
-                </span>
-              ) : (
-                <>
-                  <span>Generate & Send Proposal PDF</span>
-                  <Send className="w-3.5 h-3.5" />
-                </>
-              )}
+            <button type="submit" disabled={loading} className="nt-btn nt-btn-primary w-full disabled:opacity-60">
+              {loading ? 'Sending...' : 'Request proposal'}
+              <Send className="w-4 h-4" />
             </button>
           </form>
         )}
@@ -312,4 +200,3 @@ export function QuoteModal({ isOpen, onClose, showToast }) {
     </div>
   );
 }
-

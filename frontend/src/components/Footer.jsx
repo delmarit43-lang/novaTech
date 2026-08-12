@@ -1,182 +1,91 @@
 import React, { useState } from 'react';
-import { 
-  ArrowUp, 
-  Github, 
-  Twitter, 
-  Linkedin, 
-  Facebook,
-  Instagram,
-  Mail, 
-  ShieldCheck, 
-  Globe, 
-  Send,
-  Sparkles
-} from 'lucide-react';
-
+import { Github, Linkedin, Facebook, Instagram, Send, ArrowUp } from 'lucide-react';
 import { apiService } from '../services/api.js';
 
-export default function Footer({ showToast, onOpenAdmin }) {
-  const [newsletterEmail, setNewsletterEmail] = useState('');
+export default function Footer({ showToast }) {
+  const [email, setEmail] = useState('');
 
   const handleNewsletter = async (e) => {
     e.preventDefault();
-    if (!newsletterEmail) return;
+    if (!email) return;
     try {
-      const res = await apiService.subscribeNewsletter(newsletterEmail);
-      if (res && res.success) {
-        showToast(res.message || 'Subscribed to Nova Tech Architecture Briefing!', 'success');
-      } else {
-        showToast(res?.message || 'Subscription failed', 'error');
-      }
+      const res = await apiService.subscribeNewsletter(email);
+      showToast?.(res?.message || 'Subscribed.', res?.success ? 'success' : 'error');
     } catch (err) {
-      showToast(err.message || 'Subscribed to Nova Tech Architecture Briefing!', 'info');
+      showToast?.(err.message || 'Subscription failed.', 'error');
     }
-    setNewsletterEmail('');
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setEmail('');
   };
 
   return (
-    <footer className="bg-slate-950 border-t border-white/10 pt-20 pb-12 relative overflow-hidden text-slate-300">
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Top Newsletter Grid */}
-        <div className="glass-panel p-8 sm:p-10 rounded-3xl border border-white/10 bg-[#081226]/90 mb-16 flex flex-col lg:flex-row items-center justify-between gap-8">
-          <div className="space-y-2 text-center lg:text-left">
-            <h3 className="text-2xl font-bold text-white tracking-tight flex items-center justify-center lg:justify-start gap-2">
-              <Sparkles className="w-5 h-5 text-cyan-400" />
-              Subscribe to Nova Architecture Dispatch
-            </h3>
-            <p className="text-slate-300 text-xs sm:text-sm">
-              Bi-weekly engineering whitepapers on AI vector pipelines, sub-15ms edge compute, and cybersecurity.
+    <footer className="bg-[#081226] text-white pt-16 pb-10 relative overflow-hidden">
+      <div className="absolute inset-0 nt-grid-bg opacity-30" aria-hidden />
+      <div className="nt-glow w-96 h-96 bg-[#2563EB]/20 -top-20 right-0" aria-hidden />
+
+      <div className="nt-container relative z-10">
+        <div className="grid lg:grid-cols-12 gap-10 pb-12 border-b border-white/10">
+          <div className="lg:col-span-4 space-y-4">
+            <div className="flex items-center gap-3">
+              <img src="/nova-tech-logo.png" alt="Nova Tech" className="h-10 w-auto bg-white rounded-lg p-1" />
+              <span className="font-[family-name:var(--font-display)] font-bold text-xl">Nova Tech</span>
+            </div>
+            <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
+              We Build Digital Solutions—websites, software systems, design, and cloud platforms engineered for growth.
             </p>
-          </div>
-
-          <form onSubmit={handleNewsletter} className="flex items-center gap-2 w-full lg:w-auto">
-            <input 
-              type="email"
-              required
-              placeholder="enter.your@workemail.com"
-              value={newsletterEmail}
-              onChange={(e) => setNewsletterEmail(e.target.value)}
-              className="px-4 py-3 rounded-xl bg-slate-900 border border-white/10 text-white text-xs font-mono placeholder:text-slate-500 focus:outline-none focus:border-blue-500 transition-all w-full sm:w-72"
-            />
-            <button 
-              type="submit"
-              className="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-lg shadow-blue-600/30 transition-all shrink-0 flex items-center gap-1.5"
-            >
-              <span>Subscribe</span>
-              <Send className="w-3.5 h-3.5" />
-            </button>
-          </form>
-        </div>
-
-        {/* 5-Column Navigation Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-16 text-xs">
-          
-          {/* Brand Info */}
-          <div className="col-span-2 space-y-4">
-            <a href="#" className="inline-block p-1 rounded-2xl bg-white/95 shadow-lg border border-white/40">
-              <img 
-                src="/nova-tech-logo.png" 
-                alt="Nova Tech Logo" 
-                className="h-10 w-auto object-contain rounded-xl"
+            <form onSubmit={handleNewsletter} className="flex gap-2 pt-2">
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Newsletter email"
+                className="flex-1 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-sm text-white placeholder:text-white/35 focus:outline-none focus:border-[#3B82F6]"
               />
-            </a>
-
-            <p className="text-slate-400 text-xs leading-relaxed max-w-sm">
-              We Build Digital Solutions That Power Growth. Engineering ultra-modern software, autonomous AI platforms, and cloud infrastructure for high-growth enterprises worldwide.
-            </p>
-
-            <div className="flex items-center gap-2 text-emerald-400 font-mono text-[11px] bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 w-fit">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-              All Systems Operational (99.999% SLA)
-            </div>
+              <button type="submit" className="nt-btn nt-btn-primary !px-4" aria-label="Subscribe">
+                <Send className="w-4 h-4" />
+              </button>
+            </form>
           </div>
 
-          {/* Solutions */}
-          <div className="space-y-3">
-            <h4 className="font-bold text-white uppercase font-mono tracking-wider text-[11px]">SOLUTIONS</h4>
-            <ul className="space-y-2 text-slate-400">
-              <li><a href="#services" className="hover:text-white transition-colors">Autonomous AI Engines</a></li>
-              <li><a href="#services" className="hover:text-white transition-colors">Cloud Infrastructure</a></li>
-              <li><a href="#services" className="hover:text-white transition-colors">Full-Stack React & Go</a></li>
-              <li><a href="#services" className="hover:text-white transition-colors">Zero-Trust Cybersecurity</a></li>
-              <li><a href="#services" className="hover:text-white transition-colors">UI/UX Design Systems</a></li>
-            </ul>
+          <div className="lg:col-span-2 space-y-3 text-sm">
+            <h4 className="font-[family-name:var(--font-display)] font-semibold text-white">Company</h4>
+            <a href="#team" className="block text-slate-400 hover:text-white">Team</a>
+            <a href="#trusted" className="block text-slate-400 hover:text-white">Partners</a>
+            <a href="#contact" className="block text-slate-400 hover:text-white">Contact</a>
           </div>
-
-          {/* Company */}
-          <div className="space-y-3">
-            <h4 className="font-bold text-white uppercase font-mono tracking-wider text-[11px]">COMPANY</h4>
-            <ul className="space-y-2 text-slate-400">
-              <li><a href="#about" className="hover:text-white transition-colors">About Nova Tech</a></li>
-              <li><a href="#projects" className="hover:text-white transition-colors">Case Studies</a></li>
-              <li><a href="#process" className="hover:text-white transition-colors">Development Process</a></li>
-              <li><a href="#pricing" className="hover:text-white transition-colors">Partnership Plans</a></li>
-              <li><a href="#contact" className="hover:text-white transition-colors">Careers (Hiring Architects)</a></li>
-            </ul>
+          <div className="lg:col-span-2 space-y-3 text-sm">
+            <h4 className="font-[family-name:var(--font-display)] font-semibold text-white">Services</h4>
+            <a href="#services" className="block text-slate-400 hover:text-white">Web Solutions</a>
+            <a href="#services" className="block text-slate-400 hover:text-white">Software</a>
+            <a href="#services" className="block text-slate-400 hover:text-white">Design</a>
+            <a href="#services" className="block text-slate-400 hover:text-white">Cloud</a>
           </div>
-
-          {/* Resources & Legal */}
-          <div className="space-y-3">
-            <h4 className="font-bold text-white uppercase font-mono tracking-wider text-[11px]">RESOURCES & LEGAL</h4>
-            <ul className="space-y-2 text-slate-400">
-              <li><a href="#insights" className="hover:text-white transition-colors">Engineering Papers</a></li>
-              <li><a href="#faq" className="hover:text-white transition-colors">FAQ & Support</a></li>
-              {onOpenAdmin && (
-                <li>
-                  <button onClick={onOpenAdmin} className="text-cyan-400 font-mono font-bold hover:text-cyan-300 transition-colors">
-                    🔐 Admin Portal
-                  </button>
-                </li>
-              )}
-              <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">SOC2 Compliance</a></li>
-            </ul>
+          <div className="lg:col-span-2 space-y-3 text-sm">
+            <h4 className="font-[family-name:var(--font-display)] font-semibold text-white">Projects</h4>
+            <a href="#projects" className="block text-slate-400 hover:text-white">Portfolio</a>
+            <a href="#process" className="block text-slate-400 hover:text-white">Process</a>
+            <a href="#testimonials" className="block text-slate-400 hover:text-white">Testimonials</a>
           </div>
-
+          <div className="lg:col-span-2 space-y-3 text-sm">
+            <h4 className="font-[family-name:var(--font-display)] font-semibold text-white">Quick links</h4>
+            <a href="#faq" className="block text-slate-400 hover:text-white">FAQ</a>
+            <a href="#why-us" className="block text-slate-400 hover:text-white">Why Us</a>
+            <a href="#contact" className="block text-slate-400 hover:text-white">Start Building</a>
+          </div>
         </div>
 
-        {/* Bottom Copyright & Back To Top */}
-        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <p className="font-mono">
-            © {new Date().getFullYear()} Nova Tech Ecosystem Inc. All rights reserved. Crafted with precision.
-          </p>
-
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2 sm:gap-2.5">
-              <a href="https://github.com/Novatech97" target="_blank" rel="noopener noreferrer" className="p-2 rounded-xl bg-white/5 hover:bg-slate-800 hover:border-slate-500/50 border border-white/10 text-slate-300 hover:text-white transition-all shadow-md hover:scale-110" title="GitHub">
-                <Github className="w-4 h-4" />
-              </a>
-              <a href="#" className="p-2 rounded-xl bg-white/5 hover:bg-blue-600/30 hover:border-blue-500/50 border border-white/10 text-slate-300 hover:text-blue-400 transition-all shadow-md hover:scale-110" title="LinkedIn">
-                <Linkedin className="w-4 h-4" />
-              </a>
-              <a href="#" className="p-2 rounded-xl bg-white/5 hover:bg-blue-600/30 hover:border-blue-500/50 border border-white/10 text-slate-300 hover:text-blue-400 transition-all shadow-md hover:scale-110" title="Facebook">
-                <Facebook className="w-4 h-4" />
-              </a>
-              <a href="#" className="p-2 rounded-xl bg-white/5 hover:bg-pink-600/30 hover:border-pink-500/50 border border-white/10 text-slate-300 hover:text-pink-400 transition-all shadow-md hover:scale-110" title="Instagram">
-                <Instagram className="w-4 h-4" />
-              </a>
-              <a href="#" className="p-2 rounded-xl bg-white/5 hover:bg-sky-600/30 hover:border-sky-500/50 border border-white/10 text-slate-300 hover:text-sky-400 transition-all shadow-md hover:scale-110" title="Twitter / X">
-                <Twitter className="w-4 h-4" />
-              </a>
-            </div>
-
-            <button 
-              onClick={scrollToTop}
-              className="p-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs flex items-center gap-1.5 shadow-lg shadow-blue-600/30 transition-all"
-              title="Back to Top"
-            >
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <p>© {new Date().getFullYear()} Nova Tech. All rights reserved.</p>
+          <div className="flex items-center gap-2">
+            <a href="https://github.com/Novatech97" target="_blank" rel="noreferrer" className="p-2 rounded-lg border border-white/10 text-slate-400 hover:text-white" aria-label="GitHub"><Github className="w-4 h-4" /></a>
+            <a href="#" className="p-2 rounded-lg border border-white/10 text-slate-400 hover:text-white" aria-label="LinkedIn"><Linkedin className="w-4 h-4" /></a>
+            <a href="#" className="p-2 rounded-lg border border-white/10 text-slate-400 hover:text-white" aria-label="Facebook"><Facebook className="w-4 h-4" /></a>
+            <a href="#" className="p-2 rounded-lg border border-white/10 text-slate-400 hover:text-white" aria-label="Instagram"><Instagram className="w-4 h-4" /></a>
+            <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="ml-2 p-2 rounded-lg bg-white/10 text-white" aria-label="Back to top">
               <ArrowUp className="w-4 h-4" />
-              <span className="hidden sm:inline">TOP</span>
             </button>
           </div>
         </div>
-
       </div>
     </footer>
   );
